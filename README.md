@@ -75,10 +75,21 @@ ln -s $(pwd)/co_touch/lib qmk/keyboards/keyball/lib/co_touch
 
 ### ビルド
 
+パスワード機能なし:
+
 ```bash
 source .venv/bin/activate
 cd qmk
 make SKIP_GIT=yes keyball/keyball39:co_touch
 ```
+
+パスワード機能あり (KeePassXC連携):
+
+```bash
+source .venv/bin/activate
+./co_touch/build.sh
+```
+
+KeePassXCのマスターパスワードを入力すると、ActiveDirectoryとKeePassXCのパスワードを取得してビルドします。パスワードはファイルに残りません。
 
 生成物: `qmk/keyball_keyball39_co_touch.hex`

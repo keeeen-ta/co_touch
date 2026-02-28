@@ -19,7 +19,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 #include "quantum.h"
+#include "keymap_japanese.h"
+#include "sendstring_japanese.h"
 #include "lib/co_touch/co_touch.h"
+#ifdef SECRET_PW1_BYTES
+static const char secret_pw1[] = { SECRET_PW1_BYTES };
+static const char secret_pw2[] = { SECRET_PW2_BYTES };
+#else
+static const char secret_pw1[] = "";
+static const char secret_pw2[] = "";
+#endif
 
 enum keymap_layers {
   _ENG_,
@@ -161,8 +170,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
     case CT_PW1:
+      if (record->event.pressed && secret_pw1[0]) {
+        tap_code16(KC_LNG2);
+        send_string(secret_pw1);
+      }
       return false;
     case CT_PW2:
+      if (record->event.pressed && secret_pw2[0]) {
+        tap_code16(KC_LNG2);
+        send_string(secret_pw2);
+      }
       return false;
   }
 
