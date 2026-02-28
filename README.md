@@ -41,3 +41,44 @@
 空：Spaceキー（空白キー）
 英：英語入力に切り替え
 日：日本語入力に切り替え
+
+## ビルド手順 (Keyball39)
+
+### 前提
+
+- QMK Firmware 0.22.14
+- Python venv + QMK CLI
+- avr-gcc
+
+### セットアップ
+
+```bash
+# リポジトリのクローン
+git clone https://github.com/Yowkees/keyball.git keyball
+git clone https://github.com/qmk/qmk_firmware.git --depth 1 --recurse-submodules --shallow-submodules -b 0.22.14 qmk
+git clone https://github.com/keeeen-ta/co_touch.git co_touch
+
+# Python環境
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+uv pip install -r qmk/requirements.txt
+
+# QMKセットアップ
+qmk setup -H $(pwd)/qmk
+
+# シンボリックリンク
+ln -s $(pwd)/keyball/qmk_firmware/keyboards/keyball qmk/keyboards/keyball
+ln -s $(pwd)/co_touch/keyball39 qmk/keyboards/keyball/keyball39/keymaps/co_touch
+ln -s $(pwd)/co_touch/lib qmk/keyboards/keyball/lib/co_touch
+```
+
+### ビルド
+
+```bash
+source .venv/bin/activate
+cd qmk
+make SKIP_GIT=yes keyball/keyball39:co_touch
+```
+
+生成物: `qmk/keyball_keyball39_co_touch.hex`
